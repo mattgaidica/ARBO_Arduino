@@ -1,39 +1,58 @@
-#include "quaternionFilters.h"
+/*
+Basic_I2C.ino
+Brian R Taylor
+brian.taylor@bolderflight.com
+
+Copyright (c) 2017 Bolder Flight Systems
+
+https://github.com/bolderflight/MPU9250
+
+*/
+
 #include "MPU9250.h"
 
-#define I2Cclock 400000
-#define I2Cport Wire
-#define MPU9250_ADDRESS MPU9250_ADDRESS_AD0   // Use either this line or the next to select which I2C address your device is using
-#define MPU9250_ADDRESS MPU9250_ADDRESS_AD1
-//
-//MPU9250 myIMU0(MPU9250_ADDRESS_AD0, I2Cport, I2Cclock);
-//MPU9250 myIMU1(MPU9250_ADDRESS_AD1, I2Cport, I2Cclock);
-
- byte c = 0x00;
- byte d = 0x00;
- bool ledOn = true;
+// an MPU9250 object with the MPU-9250 sensor on I2C bus 0 with address 0x68
+MPU9250 IMU(Wire,0x68);
+int status;
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  while(!Serial){};
+  // serial to display data
+  Serial.begin(115200);
+  while(!Serial) {}
 
-  pinMode(13, OUTPUT);
-  
+  // start communication with IMU 
+  status = IMU.begin();
+  if (status < 0) {
+    Serial.println("IMU initialization unsuccessful");
+    Serial.println("Check IMU wiring or try cycling power");
+    Serial.print("Status: ");
+    Serial.println(status);
+    while(1) {}
+  }
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
-//  c = myIMU0.readByte(MPU9250_ADDRESS_AD0, WHO_AM_I_MPU9250);
-//  d = myIMU1.readByte(MPU9250_ADDRESS_AD1, WHO_AM_I_MPU9250);
-
-  Serial.print("Received AD0: 0x");
-  Serial.print(c, HEX);
-  Serial.print(", AD1: 0x");
-  Serial.println(d, HEX);
-  digitalWrite(13, ledOn);
-  ledOn = !ledOn;
+  // read the sensor
+  IMU.readSensor();
+  // display the data
+  Serial.print(IMU.getAccelX_mss(),6);
+  Serial.print("\t");
+  Serial.print(IMU.getAccelY_mss(),6);
+  Serial.print("\t");
+  Serial.print(IMU.getAccelZ_mss(),6);
+  Serial.print("\t");
+  Serial.print(IMU.getGyroX_rads(),6);
+  Serial.print("\t");
+  Serial.print(IMU.getGyroY_rads(),6);
+  Serial.print("\t");
+  Serial.print(IMU.getGyroZ_rads(),6);
+  Serial.print("\t");
+  Serial.print(IMU.getMagX_uT(),6);
+  Serial.print("\t");
+  Serial.print(IMU.getMagY_uT(),6);
+  Serial.print("\t");
+  Serial.print(IMU.getMagZ_uT(),6);
+  Serial.print("\t");
+  Serial.println(IMU.getTemperature_C(),6);
   delay(100);
-
 }

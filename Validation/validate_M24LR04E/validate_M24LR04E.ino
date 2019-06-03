@@ -1,28 +1,40 @@
 #include "NfcTag.h"
-#include <Wire.h>
+
+//#define EEPROM_I2C_LENGTH 512
 
 NfcTag nfcTag;
-int led = 13;
-byte *uid;
-byte uidlen = 0x00;
-bool flag = false;
-bool preFlag = false;
+int status;
 
 void setup() {
-  Serial.begin(9600);
-  pinMode(led, OUTPUT);
-  nfcTag.init();
+  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(115200);
+  while(!Serial) {}
+  
+  status = nfcTag.init();
+    // https://forum.arduino.cc/index.php?topic=347425.0
+  //  Wire.begin(); // Start Wire (I2C)
+  sercom3.disableWIRE(); // Disable the I2C bus
+  SERCOM3->I2CM.BAUD.bit.BAUD = SystemCoreClock / ( 2 * 100000) - 1 ; // Set the I2C SCL frequency to 400kHz
+  sercom3.enableWIRE(); // Restart the I2C bus
+  
+  if (status < 0) {
+    Serial.println("NFC initialization unsuccessful");
+    Serial.println("Check wiring or try cycling power");
+    Serial.print("Status: ");
+    Serial.println(status);
+    while(1) {}
+  }
 }
 
 void loop() {
-  Serial.println("reading NFC");
-  digitalWrite(led, HIGH);
-  delay(500);
-  digitalWrite(led, LOW);
-  //  uidlen = nfcTag.getUID(uid);
-  //  Serial.println(*uid,HEX);
-  uidlen = nfcTag.getAFI();
-  Serial.println(uidlen, HEX);
+  Serial.println("reading NFC...");
+  digitalWrite(LED_BUILTIN, HIGH);
+  byte memvol;
+  memvol = nfcTag.getMemoryVolume(); //nfcTag.readByte(EEPROM_I2C_LENGTH-1);//nfcTag.getAFI();
+  Serial.println(memvol, HEX);
+  delay(200);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(200);
 
   //  flag = nfcTag.readByte(EEPROM_I2C_LENGTH-1) == 0xff?true:false;
   //  if(flag != preFlag){
@@ -36,8 +48,4 @@ void loop() {
   //    }
   //    preFlag = flag;
   //  }
-
-  delay(500);
 }
-
-
