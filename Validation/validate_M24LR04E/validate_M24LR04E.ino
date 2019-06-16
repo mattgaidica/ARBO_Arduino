@@ -13,9 +13,9 @@ void setup() {
   status = nfcTag.init();
     // https://forum.arduino.cc/index.php?topic=347425.0
   //  Wire.begin(); // Start Wire (I2C)
-  sercom3.disableWIRE(); // Disable the I2C bus
-  SERCOM3->I2CM.BAUD.bit.BAUD = SystemCoreClock / ( 2 * 100000) - 1 ; // Set the I2C SCL frequency to 400kHz
-  sercom3.enableWIRE(); // Restart the I2C bus
+//  sercom3.disableWIRE(); // Disable the I2C bus
+//  SERCOM3->I2CM.BAUD.bit.BAUD = SystemCoreClock / ( 2 * 100000) - 1 ; // Set the I2C SCL frequency to 400kHz
+//  sercom3.enableWIRE(); // Restart the I2C bus
   
   if (status < 0) {
     Serial.println("NFC initialization unsuccessful");
