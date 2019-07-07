@@ -38,17 +38,18 @@ void setup() {
     Serial.println(status);
   }
 
-//  for (int i = 0; i <= 10; i++) {
-//    status = IMU.calibrateAccel();
-//    if (status == 1) {
-//      break;
-//    }
-//    delay(500);
-//    Serial.print("calibration failed, status = ");
-//    Serial.println(status);
-//  }
+  //  for (int i = 0; i <= 10; i++) {
+  //    status = IMU.calibrateAccel();
+  //    if (status == 1) {
+  //      break;
+  //    }
+  //    delay(500);
+  //    Serial.print("calibration failed, status = ");
+  //    Serial.println(status);
+  //  }
 
-  //  status = IMU.calibrateMag();
+  Serial.print("Calibrating mag...");
+  status = IMU.calibrateMag();
   if (status < 0) {
     Serial.println("IMU initialization unsuccessful");
     Serial.println("Check IMU wiring or try cycling power");
@@ -56,10 +57,10 @@ void setup() {
     Serial.println(status);
     while (1) {}
   }
-    status = IMU.enableWakeOnMotion(100, MPU9250::LP_ACCEL_ODR_250HZ);
-    Serial.println("Interrupt set");
-    Serial.print("Status: ");
-    Serial.println(status);
+//  status = IMU.enableWakeOnMotion(100, MPU9250::LP_ACCEL_ODR_250HZ);
+//  Serial.println("Interrupt set");
+//  Serial.print("Status: ");
+//  Serial.println(status);
 }
 
 void loop() {
