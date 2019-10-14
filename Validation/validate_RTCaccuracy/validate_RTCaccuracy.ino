@@ -22,7 +22,7 @@ void setup() {
   while (! Serial); // Wait until Serial is ready
   Serial.begin(115200);
 
-  Serial.println("Let's set the clock...");
+  Serial.println("Let's set the clock (H, M, S)");
   while(clockSet == 0) {
     if(hours == 0) {
       while (Serial.available() > 0) {
@@ -65,10 +65,11 @@ void blink(uint8_t LED, uint8_t flashes) {
   }
 }
 
-byte getSerialInt(char serialLabel) {
+byte getSerialInt(char *serialLabel) {
   int val = Serial.parseInt();
-  serialInt = (byte)val;
-  Serial.print(serialLabel + ": ");
+  byte serialInt = (byte)val;
+  Serial.print(serialLabel);
+  Serial.print(": ");
   Serial.println(serialInt);
   return serialInt;
 }
