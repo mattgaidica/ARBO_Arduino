@@ -13,7 +13,7 @@ const byte month = 10;
 const byte year = 19;
 
 RTCZero rtc;    // Create RTC object
-int clockSet = false;
+boolean clockSet = false;
 
 void setup() {
   pinMode(13, OUTPUT);
@@ -22,28 +22,19 @@ void setup() {
   while (! Serial); // Wait until Serial is ready
   Serial.begin(115200);
 
-  Serial.println("Set clock (hours -> minutes -> seconds)");
-  while(!clockSet) {
+  Serial.println("Let's set the clock...");
+  while(clockSet == 0) {
     if(hours == 0) {
       while (Serial.available() > 0) {
-        int val = Serial.parseInt();
-        hours = (byte)val;
-        Serial.print("Set hours to ");
-        Serial.println(hours);
+        hours = getSerialInt("hours");
       }
     } else if(minutes == 0) {
       while (Serial.available() > 0) {
-        int val = Serial.parseInt();
-        minutes = (byte)val;
-        Serial.print("Set minutes to ");
-        Serial.println(minutes);
+        minutes = getSerialInt("minutes");
       }
     } else if(seconds == 0) {
       while (Serial.available() > 0) {
-        int val = Serial.parseInt();
-        seconds = (byte)val;
-        Serial.print("Set seconds to ");
-        Serial.println(seconds);
+        seconds = getSerialInt("seconds");
       }
     } else {
       clockSet = true;
@@ -72,6 +63,14 @@ void blink(uint8_t LED, uint8_t flashes) {
     digitalWrite(LED, LOW);
     delay(100);
   }
+}
+
+byte getSerialInt(char serialLabel) {
+  int val = Serial.parseInt();
+  serialInt = (byte)val;
+  Serial.print(serialLabel + ": ");
+  Serial.println(serialInt);
+  return serialInt;
 }
 
 // Debbugging output of time/date
