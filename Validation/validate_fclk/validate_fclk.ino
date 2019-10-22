@@ -1,8 +1,5 @@
-#include <ZeroRegs.h>
-
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
-//  pinMode(12, OUTPUT);
   clock_init();
 }
 
