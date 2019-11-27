@@ -19,7 +19,7 @@ int status;
 
 void setup() {
   // serial to display data
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial) {}
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(imuInt, INPUT);
@@ -48,15 +48,16 @@ void setup() {
   //    Serial.println(status);
   //  }
 
-  Serial.print("Calibrating mag...");
-  status = IMU.calibrateMag();
-  if (status < 0) {
-    Serial.println("IMU initialization unsuccessful");
-    Serial.println("Check IMU wiring or try cycling power");
-    Serial.print("Status: ");
-    Serial.println(status);
-    while (1) {}
-  }
+//  Serial.print("Calibrating mag...");
+//  status = IMU.calibrateMag();
+//  if (status < 0) {
+//    Serial.println("IMU initialization unsuccessful");
+//    Serial.println("Check IMU wiring or try cycling power");
+//    Serial.print("Status: ");
+//    Serial.println(status);
+//    while (1) {}
+//  }
+
 //  status = IMU.enableWakeOnMotion(100, MPU9250::LP_ACCEL_ODR_250HZ);
 //  Serial.println("Interrupt set");
 //  Serial.print("Status: ");
@@ -76,24 +77,24 @@ void loop() {
   digitalWrite(LED_BUILTIN, HIGH);
   IMU.readSensor();
   // display the data
-  Serial.print(IMU.getAccelX_mss(), 3);
-  Serial.print("\t");
-  Serial.print(IMU.getAccelY_mss(), 3);
-  Serial.print("\t");
-  Serial.print(IMU.getAccelZ_mss(), 3);
-  Serial.print("\t");
-  Serial.print(IMU.getGyroX_rads(), 3);
-  Serial.print("\t");
-  Serial.print(IMU.getGyroY_rads(), 3);
-  Serial.print("\t");
-  Serial.print(IMU.getGyroZ_rads(), 3);
-  Serial.print("\t");
+//  Serial.print(IMU.getAccelX_mss(), 3);
+//  Serial.print("\t");
+//  Serial.print(IMU.getAccelY_mss(), 3);
+//  Serial.print("\t");
+//  Serial.print(IMU.getAccelZ_mss(), 3);
+//  Serial.print("\t");
+//  Serial.print(IMU.getGyroX_rads(), 3);
+//  Serial.print("\t");
+//  Serial.print(IMU.getGyroY_rads(), 3);
+//  Serial.print("\t");
+//  Serial.print(IMU.getGyroZ_rads(), 3);
+//  Serial.print("\t");
   Serial.print(IMU.getMagX_uT(), 3);
   Serial.print("\t");
   Serial.print(IMU.getMagY_uT(), 3);
   Serial.print("\t");
-  Serial.print(IMU.getMagZ_uT(), 3);
-  Serial.println("\t");
+  Serial.println(IMU.getMagZ_uT(), 3);
+//  Serial.println("\t");
   //  Serial.println(IMU.getTemperature_C(), 3);
   delay(5);
   digitalWrite(LED_BUILTIN, LOW);

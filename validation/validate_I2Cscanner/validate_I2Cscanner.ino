@@ -18,6 +18,11 @@ void setup() {
   byte count = 0;
 
   Wire.begin();
+  Wire.beginTransmission(0x14);
+  Wire.write(0x11); // send address
+  Wire.write(0x16);
+  Wire.endTransmission();
+  
   for (byte i = 8; i < 120; i++)
   {
     Wire.beginTransmission (i);
