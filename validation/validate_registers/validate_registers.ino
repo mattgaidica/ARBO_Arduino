@@ -7,7 +7,7 @@ void setup() {
   while (! Serial) {}  // wait for serial monitor to attach
   ZeroRegOptions opts = { Serial, true };
   printZeroRegGCLK(opts);
-//  printZeroRegs(opts);
+  printZeroRegs(opts);
 }
 
 void loop() {

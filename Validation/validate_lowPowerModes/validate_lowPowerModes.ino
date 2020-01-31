@@ -2,6 +2,17 @@
 #include <SD.h>
 #include <RTCZero.h>
 
+const int FRAM_CS = 38;
+const int ADS_CS = 11;
+const int SD_CS = 4;
+const int ACCEL_CS = 5;
+const int FRAM_HOLD = 2;
+const int ADS_PWDN = 10;
+const int ADS_DRDY = 12;
+const int ADS_START = 6;
+const int GRN_LED = 8;
+const int RED_LED = 13;
+
 #define cardSelect 4  // Set the pin used for uSD
 #define RED 13 // Red LED on Pin #13
 #define GREEN 12 // Green LED on Pin #8
@@ -18,13 +29,13 @@ extern "C" char *sbrk(int i); //  Used by FreeRAm Function
 const int SampleIntSeconds = 500;   //Simple Delay used for testing, ms i.e. 1000 = 1 sec
 
 /* Change these values to set the current initial time */
-const byte hours = 12;
-const byte minutes = 55;
+const byte hours = 1;
+const byte minutes = 0;
 const byte seconds = 0;
 /* Change these values to set the current initial date */
-const byte day = 10;
-const byte month = 10;
-const byte year = 19;
+const byte day = 12;
+const byte month = 1;
+const byte year = 20;
 
 /////////////// Global Objects ////////////////////
 RTCZero rtc;    // Create RTC object
@@ -35,6 +46,23 @@ unsigned int CurrentCycleCount;  // Num of smaples in current cycle, before uSD 
 
 
 void setup() {
+  pinMode(ACCEL_CS, OUTPUT);
+  pinMode(FRAM_CS, OUTPUT);
+  pinMode(SD_CS, OUTPUT);
+  digitalWrite(ACCEL_CS, HIGH);
+  digitalWrite(ADS_CS, HIGH);
+  //  digitalWrite(SD_CS, HIGH);
+  digitalWrite(FRAM_CS, HIGH);
+
+  pinMode(FRAM_HOLD, OUTPUT);
+  pinMode(ADS_PWDN, OUTPUT);
+  pinMode(GRN_LED, OUTPUT);
+  pinMode(RED_LED, OUTPUT);
+  digitalWrite(ADS_PWDN, LOW);
+  digitalWrite(FRAM_HOLD, HIGH);
+  digitalWrite(GRN_LED, LOW);
+  digitalWrite(RED_LED, LOW);
+  
   rtc.begin();    // Start the RTC in 24hr mode
   rtc.setTime(hours, minutes, seconds);   // Set the time
   rtc.setDate(day, month, year);    // Set the date
@@ -107,7 +135,7 @@ void loop() {
   rtc.attachInterrupt(alarmMatch); // Attaches function to be called, currently blank
   delay(50); // Brief delay prior to sleeping not really sure its required
   
-  USBDevice.detach(); // secret to low power!
+//  USBDevice.detach(); // secret to low power!
   rtc.standbyMode();    // Sleep until next alarm match
   
   // Code re-starts here after sleep !
@@ -213,7 +241,7 @@ float BatteryVoltage () {
 
 void alarmMatch() // Do something when interrupt called
 {
-  USBDevice.attach();
+//  USBDevice.attach();
 }
 
 int freeram () {
